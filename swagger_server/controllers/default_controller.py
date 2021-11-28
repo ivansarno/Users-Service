@@ -107,8 +107,6 @@ def edit_user(data):  # noqa: E501
     if connexion.request.is_json:
         data = connexion.request.get_json()  # noqa: E501
         id = data.get('id')
-        if id is None:
-            return None, 400
         user = db.session.query(DBUser).filter(DBUser.id == id).first()
         if user is None:
             return None, 404

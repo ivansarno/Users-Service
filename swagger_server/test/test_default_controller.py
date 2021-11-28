@@ -30,9 +30,18 @@ class TestDefaultController(BaseTestCase):
                 method='PUT',
                 content_type='application/json')
             self.assert200(response,
-                           'Response body is : ' + response.data.decode('utf-8'))
+                           'Response body is : ' + response.data.decode(
+                               'utf-8'))
             user = get_usr(email)
             self.assertEqual(user.points, prize)
+            id += 1000
+            response = self.client.open(
+                '/points/{id}'.format(id=id),
+                method='PUT',
+                content_type='application/json')
+            self.assert404(response,
+                           'Response body is : ' + response.data.decode(
+                               'utf-8'))
 
     def test_create_user(self):
         """Test case for create_user
@@ -53,6 +62,12 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIsNotNone(get_usr("example@example.com"))
+        response = self.client.open(
+            '/users',
+            method='POST',
+            data=json.dumps(data),
+            content_type='application/json')
+        self.assertStatus(response, 409)
 
     def test_decr_points(self):
         """Test case for decr_points
@@ -75,6 +90,13 @@ class TestDefaultController(BaseTestCase):
             method='DELETE',
             content_type='application/json')
         self.assert401(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        id += 1000
+        response = self.client.open(
+            '/points/{id}'.format(id=id),
+            method='DELETE',
+            content_type='application/json')
+        self.assert404(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
     def test_delete_user(self):
@@ -113,6 +135,24 @@ class TestDefaultController(BaseTestCase):
         user = get_usr(email)
         self.assertEqual(user.firstname, "changed_name")
 
+        data.id += 1000
+        response = self.client.open(
+            '/users',
+            method='PUT',
+            data=json.dumps(data),
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+        data = User()
+        response = self.client.open(
+            '/users',
+            method='PUT',
+            data=json.dumps(data),
+            content_type='application/json')
+        self.assert400(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_exist_by_id(self):
         """Test case for exist_by_id
 
@@ -126,6 +166,13 @@ class TestDefaultController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        id += 1000
+        response = self.client.open(
+            '/users/by_id/{id}'.format(id=id),
+            method='HEAD',
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
 
     def test_exist_by_mail(self):
         """Test case for exist_by_mail
@@ -138,6 +185,13 @@ class TestDefaultController(BaseTestCase):
             method='HEAD',
             content_type='application/json')
         self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        email = "notexist@example.com"
+        response = self.client.open(
+            '/users/by_mail/{email}'.format(email=email),
+            method='HEAD',
+            content_type='application/json')
+        self.assert404(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
     def test_get_by_id(self):
@@ -153,6 +207,14 @@ class TestDefaultController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.assertIn(bytes(email, 'utf-8'), response.data)
+        id += 1000
+        response = self.client.open(
+            '/users/by_id/{id}'.format(id=id),
+            method='GET',
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
 
     def test_get_by_mail(self):
         """Test case for get_by_mail
@@ -165,6 +227,14 @@ class TestDefaultController(BaseTestCase):
             method='GET',
             content_type='application/json')
         self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertIn(bytes(email, 'utf-8'), response.data)
+        email = "notexist@example.com"
+        response = self.client.open(
+            '/users/by_mail/{email}'.format(email=email),
+            method='GET',
+            content_type='application/json')
+        self.assert404(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
     def test_get_points(self):
@@ -181,6 +251,13 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertEqual(response.data, b'0\n')
+        id += 1000
+        response = self.client.open(
+            '/points/{id}'.format(id=id),
+            method='GET',
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
 
     def test_get_reports(self):
         """Test case for get_reports
@@ -211,7 +288,6 @@ class TestDefaultController(BaseTestCase):
 
         self.assertIn(bytes(email, 'utf-8'), response.data)
 
-
     def test_report_user(self):
         """Test case for report_user
 
@@ -233,6 +309,24 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIsNotNone(get_report(author))
+
+        data.author_email = "notexist@example.com"
+        response = self.client.open(
+            '/report',
+            method='POST',
+            data=json.dumps(data),
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+        data.author_email = data.reported_email
+        response = self.client.open(
+            '/report',
+            method='POST',
+            data=json.dumps(data),
+            content_type='application/json')
+        self.assert400(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
 
     def test_set_filter(self):
         """Test case for set_filter
@@ -267,6 +361,8 @@ class TestDefaultController(BaseTestCase):
         usr = get_usr(email)
         self.assertEqual(usr.content_filter, False)
 
+
 if __name__ == '__main__':
     import unittest
+
     unittest.main()
