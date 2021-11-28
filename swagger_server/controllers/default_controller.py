@@ -159,6 +159,8 @@ def get_by_id(id):  # noqa: E501
 
     :rtype: User
     """
+    if connexion.request.method == "HEAD":
+        return exist_by_id(id)
     user = db.session.query(DBUser).filter(DBUser.id == id).first()
     if user is None:
         return None, 404
@@ -176,6 +178,8 @@ def get_by_mail(email):  # noqa: E501
 
     :rtype: User
     """
+    if connexion.request.method == "HEAD":
+        return exist_by_mail(email)
     user = db.session.query(DBUser).filter(DBUser.email == email).first()
     if user is None:
         return None, 404
