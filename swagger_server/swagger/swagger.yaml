@@ -1,0 +1,360 @@
+---
+swagger: "2.0"
+info:
+  description: "Microservice that provide users' data management."
+  version: "1.0.0"
+  title: "Users"
+  contact:
+    email: "you@your-company.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /users:
+    get:
+      summary: "get the list of the users"
+      description: "Get the list of the users.\n"
+      operationId: "get_users_list"
+      parameters: []
+      responses:
+        "200":
+          description: "The list of users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    post:
+      summary: "create a new user"
+      description: "Create a new user from provided user's data.\n"
+      operationId: "create_user"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "new user's data"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUser"
+      responses:
+        "200":
+          description: "user created"
+        "400":
+          description: "invalid input"
+        "409":
+          description: "user already exists"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    put:
+      summary: "edit the user's data"
+      description: "Edit the user's data, id is required, only the\ndata to change\
+        \ must be provided.\n"
+      operationId: "edit_user"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "new user's data, the id field is required"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "user created"
+        "400":
+          description: "invalid input"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /users/by_mail/{email}:
+    get:
+      summary: "get the user's data"
+      description: "Get the user's data, referenced by mail.\n"
+      operationId: "get_by_mail"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "user's email"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "A User object"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    head:
+      summary: "check if the user exist"
+      description: "Check if the user exist, referenced by mail.\n"
+      operationId: "exist_by_mail"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "user's email"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /users/by_id/{id}:
+    get:
+      summary: "get the user's data"
+      description: "Get the user's data, referenced by id.\n"
+      operationId: "get_by_id"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "A User object"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    head:
+      summary: "check if the user exist,"
+      description: "Check if the user exist, referenced by id\n"
+      operationId: "exist_by_id"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    delete:
+      summary: "check if the user exist,"
+      description: "Delete a user, referenced by id\n"
+      operationId: "delete_user"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /points/{id}:
+    get:
+      summary: "get the user's points"
+      description: "Get the user's lottery points.\n"
+      operationId: "get_points"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+          schema:
+            type: "integer"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    put:
+      summary: "add points to the user"
+      description: "Add the fixed \"prize\" quantity of points to the user's account.\n"
+      operationId: "add_points"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    delete:
+      summary: "decrease points to the user"
+      description: "Remove the fixed \"price\" quantity of points to the user's account.\n"
+      operationId: "decr_points"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+        "401":
+          description: "not enough points"
+        "404":
+          description: "not found"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /report:
+    get:
+      summary: "get reports"
+      description: "Get the reports.\n"
+      operationId: "get_reports"
+      parameters: []
+      responses:
+        "200":
+          description: "A list of reports"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Report"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    post:
+      summary: "report a user"
+      description: "Report a user.\n"
+      operationId: "report_user"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "content of the report, the id will be assigned automatically"
+        required: true
+        schema:
+          $ref: "#/definitions/Report"
+      responses:
+        "200":
+          description: "report created"
+        "400":
+          description: "invalid input"
+        "404":
+          description: "a user not exists"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /filter/{id}:
+    put:
+      summary: "set content filter"
+      description: "Set the content filter.\n"
+      operationId: "set_filter"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+    delete:
+      summary: "unset content filter"
+      description: "Unset the content filter.\n"
+      operationId: "unset_filter"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "user's id"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "success"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+definitions:
+  User:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      email:
+        type: "string"
+      firstname:
+        type: "string"
+      lastname:
+        type: "string"
+      password:
+        type: "string"
+      date_of_birth:
+        type: "string"
+      points:
+        type: "integer"
+      content_filter:
+        type: "boolean"
+        default: false
+      is_admin:
+        type: "boolean"
+        default: false
+    description: "An object containing the data of an user."
+    example:
+      is_admin: false
+      firstname: "firstname"
+      password: "password"
+      content_filter: false
+      date_of_birth: "date_of_birth"
+      id: 0
+      email: "email"
+      lastname: "lastname"
+      points: 6
+  NewUser:
+    type: "object"
+    required:
+    - "date_of_birth"
+    - "email"
+    - "firstname"
+    - "lastname"
+    - "password"
+    properties:
+      email:
+        type: "string"
+      firstname:
+        type: "string"
+      lastname:
+        type: "string"
+      password:
+        type: "string"
+      date_of_birth:
+        type: "string"
+    description: "An object containing the data to create a new user."
+    example:
+      firstname: "firstname"
+      password: "password"
+      date_of_birth: "date_of_birth"
+      email: "email"
+      lastname: "lastname"
+  Report:
+    type: "object"
+    required:
+    - "author_email"
+    - "description"
+    - "reported_email"
+    - "timestamp"
+    properties:
+      id:
+        type: "integer"
+      author_email:
+        type: "string"
+      reported_email:
+        type: "string"
+      description:
+        type: "string"
+      timestamp:
+        type: "string"
+    description: "An object containing the data of a report."
+    example:
+      reported_email: "reported_email"
+      author_email: "author_email"
+      description: "description"
+      id: 0
+      timestamp: "timestamp"
