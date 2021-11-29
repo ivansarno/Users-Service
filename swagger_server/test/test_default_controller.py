@@ -22,26 +22,25 @@ class TestDefaultController(BaseTestCase):
 
         add points to the user
         """
-        with self.client:
-            email, _ = create_ex_usr(self.client)
-            id = get_usr_id(email)
-            response = self.client.open(
-                '/points/{id}'.format(id=id),
-                method='PUT',
-                content_type='application/json')
-            self.assert200(response,
-                           'Response body is : ' + response.data.decode(
-                               'utf-8'))
-            user = get_usr(email)
-            self.assertEqual(user.points, prize)
-            id += 1000
-            response = self.client.open(
-                '/points/{id}'.format(id=id),
-                method='PUT',
-                content_type='application/json')
-            self.assert404(response,
-                           'Response body is : ' + response.data.decode(
-                               'utf-8'))
+        email, _ = create_ex_usr(self.client)
+        id = get_usr_id(email)
+        response = self.client.open(
+            '/points/{id}'.format(id=id),
+            method='PUT',
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode(
+                           'utf-8'))
+        user = get_usr(email)
+        self.assertEqual(user.points, prize)
+        id += 1000
+        response = self.client.open(
+            '/points/{id}'.format(id=id),
+            method='PUT',
+            content_type='application/json')
+        self.assert404(response,
+                       'Response body is : ' + response.data.decode(
+                           'utf-8'))
 
     def test_create_user(self):
         """Test case for create_user

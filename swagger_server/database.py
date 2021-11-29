@@ -28,6 +28,7 @@ class User(db.Model):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
+
 class Report(db.Model):
     __tablename__ = 'report'
 
@@ -39,4 +40,3 @@ class Report(db.Model):
 
     def __init__(self, *args, **kw):
         super(Report, self).__init__(*args, **kw)
-

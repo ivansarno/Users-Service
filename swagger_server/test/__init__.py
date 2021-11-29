@@ -22,6 +22,7 @@ class BaseTestCase(TestCase):
 
         return app.app
 
-    def _cleanup(self):
+    @staticmethod
+    def _cleanup():
         if os.path.exists('./T_users.db'):
             os.remove('./T_users.db')

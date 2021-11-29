@@ -20,7 +20,7 @@ price = 100
 def add_points(id):  # noqa: E501
     """add points to the user
 
-    Add the fixed \&quot;prize\&quot; quantity of points to the user&#39;s account.  # noqa: E501
+    Add the fixed "prize" quantity of points to the user&#39;s account.  # noqa: E501
 
     :param id: user&#39;s id
     :type id: int
@@ -60,7 +60,7 @@ def create_user(data):  # noqa: E501
 def decr_points(id):  # noqa: E501
     """decrease points to the user
 
-    Remove the fixed \&quot;price\&quot; quantity of points to the user&#39;s account.  # noqa: E501
+    Remove the fixed "price" quantity of points to the user&#39;s account.  # noqa: E501
 
     :param id: user&#39;s id
     :type id: int
@@ -146,7 +146,6 @@ def exist_by_mail(email):  # noqa: E501
     if user is None:
         return None, 404
     return None, 200
-
 
 
 def get_by_id(id):  # noqa: E501
@@ -308,7 +307,9 @@ def _dbuser2user(data: DBUser):
         data.lastname,
         data.password,
         data.date_of_birth,
-        data.points
+        data.points,
+        data.content_filter,
+        data.is_admin
     )
     return user
 
@@ -336,4 +337,3 @@ def _dbreport2report(data: DBReport):
     report.timestamp = data.timestamp
     report.description = data.description
     return report
-
