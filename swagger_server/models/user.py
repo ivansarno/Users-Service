@@ -15,7 +15,16 @@ class User(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, email: str=None, firstname: str=None, lastname: str=None, password: str=None, date_of_birth: str=None, points: int=None, content_filter: bool=False, is_admin: bool=False):  # noqa: E501
+    def __init__(self,
+                 id: int = None,
+                 email: str = None,
+                 firstname: str = None,
+                 lastname: str = None,
+                 password: str = None,
+                 date_of_birth: str = None,
+                 points: int = None,
+                 content_filter: bool = False,
+                 is_admin: bool = False):  # noqa: E501
         """User - a model defined in Swagger
 
         :param id: The id of this User.  # noqa: E501
@@ -101,7 +110,8 @@ class User(Model):
         :type id: int
         """
         if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 

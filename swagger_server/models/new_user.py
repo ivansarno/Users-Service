@@ -15,7 +15,9 @@ class NewUser(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, email: str=None, firstname: str=None, lastname: str=None, password: str=None, date_of_birth: str=None):  # noqa: E501
+    def __init__(self, email: str = None, firstname: str = None,
+                 lastname: str = None, password: str = None,
+                 date_of_birth: str = None):  # noqa: E501
         """NewUser - a model defined in Swagger
 
         :param email: The email of this NewUser.  # noqa: E501
@@ -81,7 +83,8 @@ class NewUser(Model):
         :type email: str
         """
         if email is None:
-            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
 
@@ -104,7 +107,8 @@ class NewUser(Model):
         :type firstname: str
         """
         if firstname is None:
-            raise ValueError("Invalid value for `firstname`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `firstname`, must not be `None`")  # noqa: E501
 
         self._firstname = firstname
 
@@ -127,7 +131,8 @@ class NewUser(Model):
         :type lastname: str
         """
         if lastname is None:
-            raise ValueError("Invalid value for `lastname`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `lastname`, must not be `None`")  # noqa: E501
 
         self._lastname = lastname
 
@@ -150,7 +155,8 @@ class NewUser(Model):
         :type password: str
         """
         if password is None:
-            raise ValueError("Invalid value for `password`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `password`, must not be `None`")  # noqa: E501
 
         self._password = password
 
@@ -173,6 +179,7 @@ class NewUser(Model):
         :type date_of_birth: str
         """
         if date_of_birth is None:
-            raise ValueError("Invalid value for `date_of_birth`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `date_of_birth`, must not be `None`")  # noqa: E501
 
         self._date_of_birth = date_of_birth

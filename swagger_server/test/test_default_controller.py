@@ -2,10 +2,9 @@
 
 from __future__ import absolute_import
 
-from flask import json, jsonify
-from six import BytesIO
+from flask import json
 
-from swagger_server.controllers.default_controller import prize, _dbuser2user
+from swagger_server.controllers.default_controller import prize
 from swagger_server.models.new_user import NewUser  # noqa: E501
 from swagger_server.models.report import Report  # noqa: E501
 from swagger_server.models.user import User  # noqa: E501

@@ -15,7 +15,9 @@ class Report(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, author_email: str=None, reported_email: str=None, description: str=None, timestamp: str=None):  # noqa: E501
+    def __init__(self, id: int = None, author_email: str = None,
+                 reported_email: str = None, description: str = None,
+                 timestamp: str = None):  # noqa: E501
         """Report - a model defined in Swagger
 
         :param id: The id of this Report.  # noqa: E501
@@ -102,7 +104,8 @@ class Report(Model):
         :type author_email: str
         """
         if author_email is None:
-            raise ValueError("Invalid value for `author_email`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `author_email`, must not be `None`")  # noqa: E501
 
         self._author_email = author_email
 
@@ -125,7 +128,8 @@ class Report(Model):
         :type reported_email: str
         """
         if reported_email is None:
-            raise ValueError("Invalid value for `reported_email`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `reported_email`, must not be `None`")  # noqa: E501
 
         self._reported_email = reported_email
 
@@ -148,7 +152,8 @@ class Report(Model):
         :type description: str
         """
         if description is None:
-            raise ValueError("Invalid value for `description`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `description`, must not be `None`")  # noqa: E501
 
         self._description = description
 
@@ -171,6 +176,7 @@ class Report(Model):
         :type timestamp: str
         """
         if timestamp is None:
-            raise ValueError("Invalid value for `timestamp`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `timestamp`, must not be `None`")  # noqa: E501
 
         self._timestamp = timestamp

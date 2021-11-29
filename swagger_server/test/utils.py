@@ -51,29 +51,32 @@ def create_ex_users(client, number):
     return [create_ex_usr(client) for _ in range(number)]
 
 
-
 def get_usr_id(email):
     usr = db.session.query(DBUser).filter(DBUser.email == email).first()
     return usr.id
 
+
 def get_usr(email):
     usr = db.session.query(DBUser).filter(DBUser.email == email).first()
     return usr
+
 
 def set_usr_points(email, points=prize):
     usr = db.session.query(DBUser).filter(DBUser.email == email).first()
     usr.points += points
     db.session.commit()
 
+
 def set_filter_t(email):
     usr = db.session.query(DBUser).filter(DBUser.email == email).first()
     usr.content_filter = True
     db.session.commit()
 
+
 def create_ex_report():
     global _next_example_report
     report = DBReport()
-    report.author_email = "user" + str(_next_example_user-1) + "@example.com"
+    report.author_email = "user" + str(_next_example_user - 1) + "@example.com"
     report.reported_email = "user" + str(_next_example_user) + "@example.com"
     report.timestamp = "01/01/2000"
     report.description = "Report number: " + str(_next_example_report)
@@ -82,6 +85,7 @@ def create_ex_report():
     db.session.commit()
     return report.author_email, report.description
 
-def get_report(author):
-    return db.session.query(DBReport).filter(DBReport.author_email == author).first()
 
+def get_report(author):
+    return db.session.query(DBReport).filter(
+        DBReport.author_email == author).first()

@@ -1,16 +1,12 @@
-from datetime import datetime
-
 import connexion
-import six
 from flask import jsonify
 
+from swagger_server.database import Report as DBReport
+from swagger_server.database import User as DBUser
+from swagger_server.database import db
 from swagger_server.models.new_user import NewUser  # noqa: E501
 from swagger_server.models.report import Report  # noqa: E501
 from swagger_server.models.user import User  # noqa: E501
-from swagger_server import util
-from swagger_server.database import User as DBUser
-from swagger_server.database import Report as DBReport
-from swagger_server.database import db
 
 # lottery constants
 prize = 100
@@ -163,7 +159,7 @@ def get_by_id(id):  # noqa: E501
     user = db.session.query(DBUser).filter(DBUser.id == id).first()
     if user is None:
         return None, 404
-    user = _dbuser2user(user)
+    user = dbuser2user(user)
     return jsonify(user), 200
 
 
@@ -182,7 +178,7 @@ def get_by_mail(email):  # noqa: E501
     user = db.session.query(DBUser).filter(DBUser.email == email).first()
     if user is None:
         return None, 404
-    user = _dbuser2user(user)
+    user = dbuser2user(user)
     return jsonify(user), 200
 
 
@@ -224,7 +220,7 @@ def get_users_list():  # noqa: E501
     :rtype: List[User]
     """
     query = db.session.query(DBUser).order_by(DBUser.id)
-    users = [_dbuser2user(u) for u in query]
+    users = [dbuser2user(u) for u in query]
     return jsonify(users)
 
 
@@ -299,7 +295,7 @@ def _user2dbuser(data):
     return user
 
 
-def _dbuser2user(data: DBUser):
+def dbuser2user(data: DBUser):
     user = User(
         data.id,
         data.email,
