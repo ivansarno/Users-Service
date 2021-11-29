@@ -26,3 +26,5 @@ class BaseTestCase(TestCase):
     def _cleanup():
         if os.path.exists('./T_users.db'):
             os.remove('./T_users.db')
+        if os.path.exists('./swagger_server/test/T_users.db'):
+            os.remove('./swagger_server/test/T_users.db')
