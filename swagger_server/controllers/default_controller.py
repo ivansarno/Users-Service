@@ -16,9 +16,9 @@ price = 100
 def add_points(id):  # noqa: E501
     """add points to the user
 
-    Add the fixed "prize" quantity of points to the user&#39;s account.  # noqa: E501
+    Add the fixed "prize" quantity of points to the user's account.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: None
@@ -34,15 +34,16 @@ def add_points(id):  # noqa: E501
 def create_user(data):  # noqa: E501
     """create a new user
 
-    Create a new user from provided user&#39;s data.  # noqa: E501
+    Create a new user from provided user's data.  # noqa: E501
 
-    :param data: new user&#39;s data
+    :param data: new user's data
     :type data: dict | bytes
 
     :rtype: None
     """
     if connexion.request.is_json:
         data = NewUser.from_dict(connexion.request.get_json())  # noqa: E501
+        # check if a user with the same email already exists
         if db.session.query(DBUser) \
                 .filter(DBUser.email == data.email).first():
             return None, 409
@@ -56,9 +57,9 @@ def create_user(data):  # noqa: E501
 def decr_points(id):  # noqa: E501
     """decrease points to the user
 
-    Remove the fixed "price" quantity of points to the user&#39;s account.  # noqa: E501
+    Remove the fixed "price" quantity of points to the user's account.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: None
@@ -66,6 +67,7 @@ def decr_points(id):  # noqa: E501
     user = db.session.query(DBUser).filter(DBUser.id == id).first()
     if user is None:
         return None, 404
+    # ensures a non negative points count
     if user.points < price:
         return None, 401
     user.points -= price
@@ -78,7 +80,7 @@ def delete_user(id):  # noqa: E501
 
     Delete a user, referenced by id  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: None
@@ -91,18 +93,18 @@ def delete_user(id):  # noqa: E501
 
 
 def edit_user(data):  # noqa: E501
-    """edit the user&#39;s data
+    """edit the user's data
 
-    Edit the user&#39;s data, id is required, only the data to change must be provided.  # noqa: E501
+    Edit the user's data, id is required, only the data to change must be provided.  # noqa: E501
 
-    :param data: new user&#39;s data, the id field is required
+    :param data: new user's data, the id field is required
     :type data: dict | bytes
 
     :rtype: None
     """
     if connexion.request.is_json:
         data = connexion.request.get_json()  # noqa: E501
-        id = data.get('id')
+        id = data['id']
         user = db.session.query(DBUser).filter(DBUser.id == id).first()
         if user is None:
             return None, 404
@@ -133,7 +135,7 @@ def exist_by_mail(email):  # noqa: E501
 
     Check if the user exist, referenced by mail.  # noqa: E501
 
-    :param email: user&#39;s email
+    :param email: user's email
     :type email: str
 
     :rtype: None
@@ -145,15 +147,16 @@ def exist_by_mail(email):  # noqa: E501
 
 
 def get_by_id(id):  # noqa: E501
-    """get the user&#39;s data
+    """get the user's data
 
-    Get the user&#39;s data, referenced by id.  # noqa: E501
+    Get the user's data, referenced by id.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: User
     """
+    # redirection to head handler
     if connexion.request.method == "HEAD":
         return exist_by_id(id)
     user = db.session.query(DBUser).filter(DBUser.id == id).first()
@@ -164,15 +167,16 @@ def get_by_id(id):  # noqa: E501
 
 
 def get_by_mail(email):  # noqa: E501
-    """get the user&#39;s data
+    """get the user's data
 
-    Get the user&#39;s data, referenced by mail.  # noqa: E501
+    Get the user's data, referenced by mail.  # noqa: E501
 
-    :param email: user&#39;s email
+    :param email: user's email
     :type email: str
 
     :rtype: User
     """
+    # redirection to head handler
     if connexion.request.method == "HEAD":
         return exist_by_mail(email)
     user = db.session.query(DBUser).filter(DBUser.email == email).first()
@@ -183,11 +187,11 @@ def get_by_mail(email):  # noqa: E501
 
 
 def get_points(id):  # noqa: E501
-    """get the user&#39;s points
+    """get the user's points
 
-    Get the user&#39;s lottery points.  # noqa: E501
+    Get the user's lottery points.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: int
@@ -236,6 +240,7 @@ def report_user(data):  # noqa: E501
     """
     if connexion.request.is_json:
         data = Report.from_dict(connexion.request.get_json())  # noqa: E501
+        # check that reported and author mails exit and are not equal
         if data.reported_email == data.author_email:
             return None, 400
         reported = db.session.query(DBUser) \
@@ -244,6 +249,7 @@ def report_user(data):  # noqa: E501
             .filter(DBUser.email == data.author_email).first()
         if not (reported and author):
             return None, 404
+
         report = _report2dbreport(data)
         db.session.add(report)
         db.session.commit()
@@ -256,7 +262,7 @@ def set_filter(id):  # noqa: E501
 
     Set the content filter.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: None
@@ -273,7 +279,7 @@ def unset_filter(id):  # noqa: E501
 
     Unset the content filter.  # noqa: E501
 
-    :param id: user&#39;s id
+    :param id: user's id
     :type id: int
 
     :rtype: None
@@ -286,6 +292,9 @@ def unset_filter(id):  # noqa: E501
 
 
 def _user2dbuser(data):
+    """
+    Convert a User object to a DBUser object
+    """
     user = DBUser()
     user.email = data.email
     user.firstname = data.firstname
@@ -296,6 +305,9 @@ def _user2dbuser(data):
 
 
 def dbuser2user(data: DBUser):
+    """
+    Convert a DBUser object to a User object
+    """
     user = User(
         data.id,
         data.email,
@@ -311,6 +323,9 @@ def dbuser2user(data: DBUser):
 
 
 def _edit_dbuser(user: DBUser, data: dict):
+    """
+    Update the DBUser's field from a User object
+    """
     user.email = data.get('email', user.email)
     user.firstname = data.get('firstname', user.firstname)
     user.lastname = data.get('lastname', user.lastname)
@@ -318,6 +333,9 @@ def _edit_dbuser(user: DBUser, data: dict):
 
 
 def _report2dbreport(data: Report):
+    """
+    Convert a Report object to a DBReport object
+    """
     report = DBReport()
     report.author_email = data.author_email
     report.reported_email = data.reported_email
@@ -327,6 +345,9 @@ def _report2dbreport(data: Report):
 
 
 def _dbreport2report(data: DBReport):
+    """
+    Convert a DBReport object to a Report object
+    """
     report = Report()
     report.author_email = data.author_email
     report.reported_email = data.reported_email

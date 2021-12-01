@@ -32,6 +32,8 @@ class TestDefaultController(BaseTestCase):
                            'utf-8'))
         user = get_usr(email)
         self.assertEqual(user.points, prize)
+
+        # try a not existing user
         id += 1000
         response = self.client.open(
             '/points/{id}'.format(id=id),
@@ -60,6 +62,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIsNotNone(get_usr("example@example.com"))
+
+        # try a second time and receive a user already exists error
         response = self.client.open(
             '/users',
             method='POST',
@@ -83,12 +87,15 @@ class TestDefaultController(BaseTestCase):
                        'Response body is : ' + response.data.decode('utf-8'))
         user = get_usr(email)
         self.assertEqual(user.points, 0)
+
+        # try to set a negative points count
         response = self.client.open(
             '/points/{id}'.format(id=id),
             method='DELETE',
             content_type='application/json')
         self.assert401(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        # try a not existing user
         id += 1000
         response = self.client.open(
             '/points/{id}'.format(id=id),
@@ -133,6 +140,7 @@ class TestDefaultController(BaseTestCase):
         user = get_usr(email)
         self.assertEqual(user.firstname, "changed_name")
 
+        # try a not existing user
         data.id += 1000
         response = self.client.open(
             '/users',
@@ -142,6 +150,7 @@ class TestDefaultController(BaseTestCase):
         self.assert404(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+        # try a invalid input
         data = User()
         response = self.client.open(
             '/users',
@@ -164,6 +173,8 @@ class TestDefaultController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+
+        # try a not existing user
         id += 1000
         response = self.client.open(
             '/users/by_id/{id}'.format(id=id),
@@ -184,6 +195,8 @@ class TestDefaultController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+
+        # try a not existing user
         email = "notexist@example.com"
         response = self.client.open(
             '/users/by_mail/{email}'.format(email=email),
@@ -206,6 +219,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIn(bytes(email, 'utf-8'), response.data)
+
+        # try a not existing user
         id += 1000
         response = self.client.open(
             '/users/by_id/{id}'.format(id=id),
@@ -227,6 +242,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIn(bytes(email, 'utf-8'), response.data)
+
+        # try a not existing user
         email = "notexist@example.com"
         response = self.client.open(
             '/users/by_mail/{email}'.format(email=email),
@@ -249,6 +266,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertEqual(response.data, b'0\n')
+
+        # try a not existing user
         id += 1000
         response = self.client.open(
             '/points/{id}'.format(id=id),
@@ -308,6 +327,7 @@ class TestDefaultController(BaseTestCase):
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertIsNotNone(get_report(author))
 
+        # try a not existing user
         data.author_email = "notexist@example.com"
         response = self.client.open(
             '/report',
@@ -317,6 +337,7 @@ class TestDefaultController(BaseTestCase):
         self.assert404(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+        # try author mail == reported mail case
         data.author_email = data.reported_email
         response = self.client.open(
             '/report',
