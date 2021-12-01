@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 import connexion
-
-from swagger_server import encoder
-from swagger_server.database import db
-from swagger_server.database import User as DBUser
 from sqlalchemy.exc import IntegrityError
 
+from swagger_server import encoder
+from swagger_server.database import User as DBUser
+from swagger_server.database import db
 
-def _create_admin(app):
+
+def _create_admin(app):  # pragma: no cover
     with app.app.app_context():
         try:
             example = DBUser()
@@ -26,8 +26,7 @@ def _create_admin(app):
             pass
 
 
-
-def main():
+def main():  # pragma: no cover
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'Users'})
@@ -38,5 +37,5 @@ def main():
     app.run(port=8080)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     main()
