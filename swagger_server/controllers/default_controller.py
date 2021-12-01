@@ -1,5 +1,4 @@
 import connexion
-from flask import jsonify
 
 from swagger_server.database import Report as DBReport
 from swagger_server.database import User as DBUser
@@ -163,7 +162,7 @@ def get_by_id(id):  # noqa: E501
     if user is None:
         return None, 404
     user = dbuser2user(user)
-    return jsonify(user), 200
+    return user, 200
 
 
 def get_by_mail(email):  # noqa: E501
@@ -183,7 +182,7 @@ def get_by_mail(email):  # noqa: E501
     if user is None:
         return None, 404
     user = dbuser2user(user)
-    return jsonify(user), 200
+    return user, 200
 
 
 def get_points(id):  # noqa: E501
@@ -212,7 +211,7 @@ def get_reports():  # noqa: E501
     """
     query_reports = db.session.query(DBReport).order_by(DBReport.id.desc())
     reports = [_dbreport2report(r) for r in query_reports]
-    return jsonify(reports), 200
+    return reports, 200
 
 
 def get_users_list():  # noqa: E501
@@ -225,7 +224,7 @@ def get_users_list():  # noqa: E501
     """
     query = db.session.query(DBUser).order_by(DBUser.id)
     users = [dbuser2user(u) for u in query]
-    return jsonify(users)
+    return users
 
 
 def report_user(data):  # noqa: E501
