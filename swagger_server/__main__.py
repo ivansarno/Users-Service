@@ -34,7 +34,7 @@ def main():  # pragma: no cover
     db.init_app(app.app)
     db.create_all(app=app.app)
     _create_admin(app)
-    app.run(port=8080)
+    app.run(port=5001)
 
 
 if __name__ == '__main__':  # pragma: no cover
