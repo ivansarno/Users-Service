@@ -4,7 +4,7 @@ from swagger_server.database import User as DBUser
 from swagger_server.database import Report as DBReport
 
 
-def create_user(client, mail, firstname, lastname, date_of_birth, password):
+def create_user(mail, firstname, lastname, date_of_birth, password):
     """
     Utility function to create a new user in the tests
     """
@@ -24,12 +24,11 @@ _next_example_user = 1
 _next_example_report = 1
 
 
-def create_ex_usr(client):
+def create_ex_usr():
     """
     Create an unique example user with username = user<counter and
     this data:
     (username@example.com, username, username, "02/02/2000", passusername)
-    :param client: the testing app
     :return: (email, password) of the new user
     """
     global _next_example_user
@@ -37,18 +36,17 @@ def create_ex_usr(client):
     _next_example_user += 1
     email = name + "@example.com"
     password = "pass" + name
-    create_user(client, email, name, name, "02/02/2000", password)
+    create_user(email, name, name, "02/02/2000", password)
     return email, password
 
 
-def create_ex_users(client, number):
+def create_ex_users(number):
     """
     Create multiple example users
-    :param client: the testing app
     :param number: number of users to create
     :return: list of (email, password) tuple of the new users
     """
-    return [create_ex_usr(client) for _ in range(number)]
+    return [create_ex_usr() for _ in range(number)]
 
 
 def get_usr_id(email):

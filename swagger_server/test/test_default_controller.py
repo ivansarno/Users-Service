@@ -21,7 +21,7 @@ class TestDefaultController(BaseTestCase):
 
         add points to the user
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/points/{id}'.format(id=id),
@@ -76,7 +76,7 @@ class TestDefaultController(BaseTestCase):
 
         decrease points to the user
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         set_usr_points(email)
         response = self.client.open(
@@ -109,7 +109,7 @@ class TestDefaultController(BaseTestCase):
 
         check if the user exist,
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/users/by_id/{id}'.format(id=id),
@@ -125,7 +125,7 @@ class TestDefaultController(BaseTestCase):
         edit the user's data
         """
 
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         data = User()
         data.id = id
@@ -165,7 +165,7 @@ class TestDefaultController(BaseTestCase):
 
         check if the user exist,
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/users/by_id/{id}'.format(id=id),
@@ -188,7 +188,7 @@ class TestDefaultController(BaseTestCase):
 
         check if the user exist
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         response = self.client.open(
             '/users/by_mail/{email}'.format(email=email),
             method='HEAD',
@@ -210,7 +210,7 @@ class TestDefaultController(BaseTestCase):
 
         get the user's data
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/users/by_id/{id}'.format(id=id),
@@ -234,7 +234,7 @@ class TestDefaultController(BaseTestCase):
 
         get the user's data
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         response = self.client.open(
             '/users/by_mail/{email}'.format(email=email),
             method='GET',
@@ -257,7 +257,7 @@ class TestDefaultController(BaseTestCase):
 
         get the user's points
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/points/{id}'.format(id=id),
@@ -295,7 +295,7 @@ class TestDefaultController(BaseTestCase):
 
         get the list of the users
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         response = self.client.open(
             '/users',
             method='GET',
@@ -310,7 +310,7 @@ class TestDefaultController(BaseTestCase):
 
         report a user
         """
-        users = create_ex_users(self.client, 2)
+        users = create_ex_users(2)
         author = users[0][0]
         reported = users[1][0]
         data = Report()
@@ -352,7 +352,7 @@ class TestDefaultController(BaseTestCase):
 
         set content filter
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         response = self.client.open(
             '/filter/{id}'.format(id=id),
@@ -368,7 +368,7 @@ class TestDefaultController(BaseTestCase):
 
         unset content filter
         """
-        email, _ = create_ex_usr(self.client)
+        email, _ = create_ex_usr()
         id = get_usr_id(email)
         set_filter_t(email)
         response = self.client.open(

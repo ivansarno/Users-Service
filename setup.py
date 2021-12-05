@@ -18,7 +18,7 @@ setup(
     name=NAME,
     version=VERSION,
     description="Users",
-    author_email="you@your-company.com",
+    author_email="i.sarno@studento.unipi.it",
     url="",
     keywords=["Swagger", "Users"],
     install_requires=REQUIRES,
@@ -28,7 +28,7 @@ setup(
     entry_points={
         'console_scripts': ['swagger_server=swagger_server.__main__:main']},
     long_description="""\
-    Microservice that provide users&#39; data management.
+    Microservice that provide users'; data management.
     """
 )
 
