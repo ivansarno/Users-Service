@@ -380,6 +380,43 @@ class TestDefaultController(BaseTestCase):
         usr = get_usr(email)
         self.assertEqual(usr.content_filter, False)
 
+    def test_lottery(self):
+        """Test case for lottery
+
+        run the lottery and return the winner id.
+        """
+        email, _ = create_ex_usr()
+        response = self.client.open(
+            '/lottery',
+            method='GET',
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        user = get_usr(email)
+        self.assertEqual(user.points, prize)
+        self.assertEqual(user.id, response.json)
+
+    def test_search(self):
+        """Test case for search
+
+        get the list of the users that match with the string word
+        """
+        email, _ = create_ex_usr()
+        caller_mail, _ = create_ex_usr()
+        caller = get_usr(caller_mail)
+        name = get_usr(email).firstname
+        query_string = [('caller', caller.id),
+                        ('word', name)]
+        response = self.client.open(
+            '/search',
+            method='GET',
+            content_type='application/json',
+            query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertIn(bytes(email, 'utf-8'), response.data)
+        self.assertNotIn(bytes(caller_mail, 'utf-8'), response.data)
+
 
 if __name__ == '__main__':
     import unittest

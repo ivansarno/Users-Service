@@ -71,6 +71,31 @@ paths:
         "404":
           description: "not found"
       x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /search:
+    get:
+      summary: "get the list of the users that match with the string word"
+      description: "Get the list of the users that contain the string word in the\
+        \ mail, \nfirst name or last name, the caller recognized by id is excluded.\n"
+      operationId: "search"
+      parameters:
+      - name: "caller"
+        in: "query"
+        description: "the word to search"
+        required: true
+        type: "integer"
+      - name: "word"
+        in: "query"
+        description: "the word to search"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "The list of users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
   /users/by_mail/{email}:
     get:
       summary: "get the user's data"
@@ -154,6 +179,20 @@ paths:
       responses:
         "200":
           description: "success"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /lottery:
+    get:
+      summary: "run the lottery and return the winner id."
+      description: "Run the lottery and return the winner id.\n"
+      operationId: "lottery"
+      parameters: []
+      responses:
+        "200":
+          description: "the winner id."
+          schema:
+            type: "integer"
+        "404":
+          description: "not found"
       x-swagger-router-controller: "swagger_server.controllers.default_controller"
   /points/{id}:
     get:

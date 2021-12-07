@@ -1,3 +1,5 @@
+import random
+
 import connexion
 
 from swagger_server.database import Report as DBReport
@@ -288,6 +290,51 @@ def unset_filter(id):  # noqa: E501
         user.content_filter = False
         db.session.commit()
     return None, 200
+
+
+def lottery():  # noqa: E501
+    """run the lottery and return the winner id.
+
+    Run the lottery and return the winner id.  # noqa: E501
+
+
+    :rtype: int
+    """
+    users = DBUser.query.all()
+    winner = random.choice(users)
+    if winner is not None:
+        winner.points += prize
+        return winner.id
+    else:
+        return None, 404
+
+
+def search(caller, word=None):  # noqa: E501
+    """get the list of the users that match with the string word
+
+    Get the list of the users that contain the string word in the mail,  first name or last name, the caller recognized by id is excluded.  # noqa: E501
+
+    :param caller: the word to search
+    :type caller: int
+    :param word: the word to search
+    :type word: str
+
+    :rtype: List[User]
+    """
+    if word is None or len(word) == 0:
+        found = db.session.query(DBUser). \
+            filter(DBUser.id != caller). \
+            limit(100).all()  # avoiding a huge result
+    else:
+        search = "%{}%".format(word)
+        found = db.session.query(DBUser). \
+            filter(DBUser.email.like(search)
+                   | DBUser.firstname.like(search)
+                   | DBUser.lastname.like(search),
+                   DBUser.id != caller). \
+            limit(100).all()  # avoiding a huge result
+    found = [dbuser2user(u) for u in found]
+    return found
 
 
 def _user2dbuser(data):
