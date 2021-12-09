@@ -304,6 +304,7 @@ def lottery():  # noqa: E501
     winner = random.choice(users)
     if winner is not None:
         winner.points += prize
+        db.session.commit()
         return winner.id
     else:
         return None, 404
